@@ -1,0 +1,17 @@
+{
+  "url": "ws://0abd00240419749281e63ef5000c0073.web-security-academy.net/chat",
+  "headers": {
+    "Cookie": "session=U7fmXj2LjzizDiu3pK23EoXxx4jhsYZ3",
+    "Origin": "https://0abd00240419749281e63ef5000c0073.web-security-academy.net",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  "init_messages": [],
+  "message_template": "{\"message\": \"{{payload}}\"}",
+  "placeholder": "{{payload}}",
+  "response_timeout": 20,
+  "response_count": 2,
+  "extract": {
+    "json_paths": ["content", "message", "text"]
+  },
+  "proxy": null
+}
