@@ -2,6 +2,8 @@
 
 **An intelligent, adaptive prompt injection tool powered by a local uncensored LLM advisor.**
 
+![Logo Preview](./images/logo.png)
+
 Agent Knife uses an evaluator and advisor uncensored LLM agent to dynamically read the response from the victim agent and generate the next payloads in real time, while automatically detecting leaks such as system prompts, flags, secrets, tokens, and credentials.
 
 It supports both **HTTP** (Burp request files) and **WebSocket** targets, with a live dashboard for monitoring the attack.
@@ -58,6 +60,7 @@ Make sure your advisor is accessible at an endpoint like:
 ```
 http://127.0.0.1:8080/v1/chat/completions
 ```
+![Dashboard Preview](./images/dashboard.png)
 
 ---
 
