@@ -1,1 +1,19 @@
-[]
+[
+  {
+    "id": "id-mo1s5w0w-wuitu6g",
+    "name": "Default target",
+    "uri": "",
+    "protocol": "http",
+    "testMessage": "Hello from Agent Killer connection test",
+    "requestBody": "{{message}}",
+    "headers": "",
+    "headersEnabled": false,
+    "proxy": "",
+    "proxyEnabled": false,
+    "extractPrompt": "",
+    "extractEnabled": false,
+    "targetRequestEnabled": true,
+    "status": "unknown",
+    "lastAgentResponse": ""
+  }
+]

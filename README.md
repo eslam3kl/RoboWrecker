@@ -1,4 +1,7 @@
-# RoboWrecker
+<h1 align="left">
+  <img src="images/logo.png" alt="RoboWrecker logo" width="28" style="vertical-align:middle;margin-right:8px;">
+  <span style="vertical-align:middle;">RoboWrecker</span>
+</h1>
 
 RoboWrecker is an automation tool for testing AI chatbots in a simple and practical way. It works by using one AI agent to automatically talk to another (the target chatbot) and send different inputs based on the objectives and the target's agent responses.
 

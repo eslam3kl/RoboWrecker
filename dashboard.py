@@ -23,6 +23,7 @@ import os
 import queue
 import time
 import threading
+from urllib.parse import urlparse, unquote
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from datetime import datetime, timezone
 
@@ -35,6 +36,7 @@ ASSESSMENT_LOG_FILE = "assessment_session_logs.jsonl"
 AGENTS_CONFIG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "agent_config")
 ATTACKER_AGENTS_JSON = os.path.join(AGENTS_CONFIG_DIR, "attacker_agents.json")
 TARGET_AGENTS_JSON = os.path.join(AGENTS_CONFIG_DIR, "target_agents.json")
+IMAGES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "images")
 _agents_file_lock = threading.Lock()
 
 
@@ -419,8 +421,42 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
   .app{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
   .side{background:var(--panel);border-right:.5px solid var(--border);padding:20px 14px 16px;display:flex;flex-direction:column;gap:0;min-height:100vh}
   .side-scroll{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden}
-  .brand{font-size:15px;font-weight:600;letter-spacing:-.01em;margin-bottom:14px;padding:0 4px;flex-shrink:0}
-  .brand span{color:var(--muted);font-weight:400}
+  .brand{display:flex;align-items:center;gap:12px;font-size:24px;font-weight:700;letter-spacing:-.02em;margin-bottom:16px;padding:0 4px;flex-shrink:0}
+  .brand-logo{
+    width:80px;
+    height:80px;
+    object-fit:contain;
+    opacity:.94;
+    background:transparent;
+    mix-blend-mode:multiply;
+    filter:drop-shadow(0 2px 5px rgba(0,0,0,.16));
+  }
+  .brand-text{
+    white-space:nowrap;
+    color:#0f0f11;
+    background:linear-gradient(180deg,#2f2f33 0%,#151518 50%,#050506 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:
+      0 1px 0 rgba(255,255,255,.30),
+      0 0 8px rgba(0,0,0,.12),
+      0 0 18px rgba(0,0,0,.10);
+  }
+  [data-theme="dark"] .brand-logo{
+    opacity:.95;
+    background:transparent;
+    mix-blend-mode:screen;
+    filter:brightness(1.1) contrast(1.08) drop-shadow(0 2px 6px rgba(0,0,0,.55));
+  }
+  [data-theme="dark"] .brand-text{
+    color:#f4f7fb;
+    background:linear-gradient(180deg,#ffffff 0%,#f1f3f6 56%,#dce2ea 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    text-shadow:0 0 12px rgba(255,255,255,.24),0 1px 1px rgba(255,255,255,.12);
+  }
   .side-nav-agents{display:none;flex-direction:column;flex:1;min-height:0;gap:10px;padding:0 2px 10px;overflow:hidden}
   .side-nav-agents.active{display:flex}
   .agent-list{font-size:12px;border:.5px solid var(--border);border-radius:8px;padding:6px;flex:1;min-height:72px;max-height:min(42vh,260px);overflow-y:auto}
@@ -686,7 +722,10 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
 <body>
 <div class="app">
   <aside class="side">
-    <div class="brand">RoboWrecker</div>
+    <div class="brand">
+      <img src="/images/logo.png" alt="RoboWrecker logo" class="brand-logo">
+      <span class="brand-text">RoboWrecker</span>
+    </div>
     <button type="button" id="nav-agents-attacker" class="nav-btn" title="Attacker advisor profiles" onclick="switchSideAgentTab('attacker')"><span class="nav-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v3"/><circle cx="12" cy="1" r=".8"/><rect x="4" y="4" width="16" height="12" rx="2.5"/><path d="M7 7l3 2M17 7l-3 2"/><path d="M8 10.5l1.5-1.2 1.5 1.2M13 10.5l1.5-1.2 1.5 1.2"/><rect x="8" y="12.5" width="8" height="2" rx=".4"/><path d="M10.7 12.5v2M13.3 12.5v2"/><path d="M4 9H2.5M20 9h1.5"/><path d="M7.5 16v3.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V16"/></svg></span><span class="nav-copy"><span class="nav-title">Attacker agents</span><span class="nav-desc">Advisor endpoints &amp; prompts</span></span></button>
     <button type="button" id="nav-agents-target" class="nav-btn" title="Target agent profiles" onclick="switchSideAgentTab('target')"><span class="nav-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v3"/><circle cx="12" cy="1" r=".8"/><rect x="4.5" y="4" width="15" height="11" rx="2.5"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="9" r="1.2"/><path d="M9 12.5q3 2 6 0"/><path d="M4.5 8.5H3M19.5 8.5H21"/><path d="M7.5 15v4a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5v-4"/><path d="M12 15v1.5"/><path d="M10.5 16.5l1.5 4 1.5-4"/></svg></span><span class="nav-copy"><span class="nav-title">Target agents</span><span class="nav-desc">Victim apps under test</span></span></button>
     <button type="button" id="nav-initiate" class="nav-btn active" title="Configure a new assessment" onclick="showView('initiate')"><span class="nav-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1.8"/><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22"/></svg></span><span class="nav-copy"><span class="nav-title">New Assessment</span><span class="nav-desc">Targets, objectives, launch</span></span></button>
@@ -2528,7 +2567,9 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         log.info("GET %s from %s", self.path, self.address_string())
-        if self.path == "/" or self.path == "":
+        req_path = urlparse(self.path).path
+
+        if req_path == "/" or req_path == "":
             body = DASHBOARD_HTML.encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -2536,7 +2577,33 @@ class _Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
 
-        elif self.path == "/api/logs":
+        elif req_path.startswith("/images/"):
+            rel = unquote(req_path[len("/images/"):]).replace("\\", "/")
+            normalized = os.path.normpath(rel)
+            if normalized.startswith("..") or os.path.isabs(normalized):
+                return self.send_error(403)
+            file_path = os.path.join(IMAGES_DIR, normalized)
+            if not os.path.isfile(file_path):
+                return self.send_error(404)
+            ext = os.path.splitext(file_path)[1].lower()
+            content_type = {
+                ".png": "image/png",
+                ".jpg": "image/jpeg",
+                ".jpeg": "image/jpeg",
+                ".gif": "image/gif",
+                ".webp": "image/webp",
+                ".svg": "image/svg+xml",
+            }.get(ext, "application/octet-stream")
+            with open(file_path, "rb") as f:
+                body = f.read()
+            self.send_response(200)
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Cache-Control", "public, max-age=3600")
+            self.end_headers()
+            self.wfile.write(body)
+
+        elif req_path == "/api/logs":
             body = json.dumps(_read_logs(), ensure_ascii=False).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
@@ -2544,7 +2611,7 @@ class _Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
 
-        elif self.path == "/api/config":
+        elif req_path == "/api/config":
             body = json.dumps(
                 {"advisor_prompt": _advisor_prompt, "evaluator_prompt": _evaluator_prompt},
                 ensure_ascii=False,
@@ -2555,7 +2622,7 @@ class _Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
 
-        elif self.path == "/api/assessment/state":
+        elif req_path == "/api/assessment/state":
             data = {"running": [], "completed": []}
             if _state_handler:
                 try:
@@ -2569,7 +2636,7 @@ class _Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
 
-        elif self.path == "/api/agents":
+        elif req_path == "/api/agents":
             attackers = _read_agent_json_file(ATTACKER_AGENTS_JSON)
             targets = _read_agent_json_file(TARGET_AGENTS_JSON)
             body = json.dumps(
@@ -2582,7 +2649,7 @@ class _Handler(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(body)
 
-        elif self.path == "/events":
+        elif req_path == "/events":
             self._handle_sse()
 
         else:
