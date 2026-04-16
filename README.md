@@ -53,7 +53,6 @@ Full installation guide, configuration details, and advanced usage are available
 ├── advisor_agent.py      # Advisor model integration, payload generation, and evaluation
 ├── ws_transport.py       # WebSocket communication and transport handling
 ├── memory.py             # Logging, history tracking, and session memory management
-├── req.http              # Sample HTTP requests for testing targets
 ├── ws_config.json        # WebSocket target configuration
 ├── logs.jsonl            # Runtime logs and assessment traces
 ├── requirements.txt      # Python dependencies
