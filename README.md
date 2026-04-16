@@ -1,8 +1,20 @@
-# Agent Killer
+# RoboWrecker
 
-TwinMind is an automation tool for testing AI chatbots in a simple and practical way. It works by using one AI agent to automatically talk to another (the target chatbot) and send different inputs based on the objectives and the target's agent responses.
+RoboWrecker is an automation tool for testing AI chatbots in a simple and practical way. It works by using one AI agent to automatically talk to another (the target chatbot) and send different inputs based on the objectives and the target's agent responses.
 
 The tool helps guide how these interactions happen, making it easier to simulate real-world scenarios and check how the target AI responds. This allows users to identify weaknesses, understand behavior, and evaluate how secure and reliable the chatbot is.
+
+<p align="center">
+  <img src="images/main.png" width="700">
+  <br>
+  <strong>It takes a bot to break a bot</strong>
+</p>
+
+
+<p align="center">
+
+<a href="https://eslam3kl.gitbook.io/blog/recon-automation-and-more/robowrecker-ai-tool"><img src="https://img.shields.io/badge/Documentation-%23000000.svg?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1ib29rLW9wZW4iPjxwYXRoIGQ9Ik0xMiA3djE0Ii8+PHBhdGggZD0iTTMgMThhMSAxIDAgMCAxLTEtMVY0YTEgMSAwIDAgMSAxLTFoNWE0IDQgMCAwIDEgNCA0IDQgNCAwIDAgMSA0LTRoNWExIDEgMCAwIDEgMSAxdjEzYTEgMSAwIDAgMS0xIDFoLTZhMyAzIDAgMCAwLTMgMyAzIDMgMCAwIDAtMy0zeiIvPjwvc3ZnPg==&logoColor=white"></a>
+&nbsp;&nbsp;
 
 
 ## Features
@@ -33,7 +45,7 @@ Full installation guide, configuration details, and advanced usage are available
 
 ## Project Structure
 ```
-├── twinmind.py           # Main entrypoint and assessment orchestration engine
+├── RoboWrecker.py        # Main entrypoint and assessment orchestration engine
 ├── dashboard.py          # Web dashboard server and UI logic (multi-agent + conversations)
 ├── advisor_agent.py      # Advisor model integration, payload generation, and evaluation
 ├── ws_transport.py       # WebSocket communication and transport handling
