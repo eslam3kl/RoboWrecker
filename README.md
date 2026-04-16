@@ -44,7 +44,7 @@ The tool helps guide how these interactions happen, making it easier to simulate
 
 Full installation guide, configuration details, and advanced usage are available here:
 
-👉 https://eslam3kl.gitbook.io
+👉 https://eslam3kl.gitbook.io/blog/recon-automation-and-more/robowrecker-ai-tool
 
 ## Project Structure
 ```
