@@ -402,7 +402,7 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Assessment Dashboard</title>
+<title>TwinMind Dashboard</title>
 <style>
   :root{
     --bg:#f5f5f7;--panel:#ffffff;--panel2:#fafafa;--border:#d2d2d7;--text:#1d1d1f;
@@ -686,7 +686,7 @@ DASHBOARD_HTML = r"""<!DOCTYPE html>
 <body>
 <div class="app">
   <aside class="side">
-    <div class="brand">Assessment <span>Console</span></div>
+    <div class="brand">TwinMind</div>
     <button type="button" id="nav-agents-attacker" class="nav-btn" title="Attacker advisor profiles" onclick="switchSideAgentTab('attacker')"><span class="nav-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v3"/><circle cx="12" cy="1" r=".8"/><rect x="4" y="4" width="16" height="12" rx="2.5"/><path d="M7 7l3 2M17 7l-3 2"/><path d="M8 10.5l1.5-1.2 1.5 1.2M13 10.5l1.5-1.2 1.5 1.2"/><rect x="8" y="12.5" width="8" height="2" rx=".4"/><path d="M10.7 12.5v2M13.3 12.5v2"/><path d="M4 9H2.5M20 9h1.5"/><path d="M7.5 16v3.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V16"/></svg></span><span class="nav-copy"><span class="nav-title">Attacker agents</span><span class="nav-desc">Advisor endpoints &amp; prompts</span></span></button>
     <button type="button" id="nav-agents-target" class="nav-btn" title="Target agent profiles" onclick="switchSideAgentTab('target')"><span class="nav-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v3"/><circle cx="12" cy="1" r=".8"/><rect x="4.5" y="4" width="15" height="11" rx="2.5"/><circle cx="9" cy="9" r="1.2"/><circle cx="15" cy="9" r="1.2"/><path d="M9 12.5q3 2 6 0"/><path d="M4.5 8.5H3M19.5 8.5H21"/><path d="M7.5 15v4a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5v-4"/><path d="M12 15v1.5"/><path d="M10.5 16.5l1.5 4 1.5-4"/></svg></span><span class="nav-copy"><span class="nav-title">Target agents</span><span class="nav-desc">Victim apps under test</span></span></button>
     <button type="button" id="nav-initiate" class="nav-btn active" title="Configure a new assessment" onclick="showView('initiate')"><span class="nav-ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5.5"/><circle cx="12" cy="12" r="1.8"/><path d="M12 2v3.5M12 18.5V22M2 12h3.5M18.5 12H22"/></svg></span><span class="nav-copy"><span class="nav-title">New Assessment</span><span class="nav-desc">Targets, objectives, launch</span></span></button>
