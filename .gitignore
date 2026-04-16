@@ -32,5 +32,5 @@ Thumbs.db
 .env.*
 
 # Local agent config (do not publish real endpoints/secrets)
-agent_config/*.json
-!agent_config/*.example.json
+# agent_config/*.json
+# !agent_config/*.example.json
