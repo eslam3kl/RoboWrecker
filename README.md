@@ -1,157 +1,98 @@
-# Agent Knife — AI-Driven Agent Fuzzer
+# Agent Killer
 
-**An intelligent, adaptive prompt injection tool powered by a local uncensored LLM advisor.**
+Adaptive agent security testing platform with a live web dashboard.
 
-![Logo Preview](./images/logo.png)
+## Features
 
-Agent Knife uses an evaluator and advisor uncensored LLM agent to dynamically read the response from the victim agent and generate the next payloads in real time, while automatically detecting leaks such as system prompts, flags, secrets, tokens, and credentials.
+- Adaptive red-team loop driven by an advisor model
+- HTTP and WebSocket target support
+- Per-agent connection testing from the UI (attacker + target)
+- Live assessment monitoring (running and completed views)
+- Operator instruction injection during active runs
+- Conversation-aware attack iteration and objective tracking
+- Leak counting and status reporting in dashboard tables
+- Theme-aware UI with role-based conversation styling
 
-It supports both **HTTP** (Burp request files) and **WebSocket** targets, with a live dashboard for monitoring the attack.
+## How It Works
 
----
+1. You configure attacker and target agents in the dashboard.
+2. You launch an assessment with context/objective and selected agents.
+3. The attacker advisor generates payloads based on target responses.
+4. The system sends payloads to the target (HTTP or WebSocket transport).
+5. Responses are evaluated, logged, and shown in real time in the UI.
+6. You can inject operator instructions to steer the attacker mid-run.
+7. The run ends on objective completion, manual stop, or iteration limits.
 
-## ✨ Features
-
-- AI-powered adaptive prompt injection using a local LLM advisor
-- Real-time leak detection (flags, system prompts, API keys, credentials, etc.)
-- Support for **HTTP** and **WebSocket** transports
-- Live web dashboard at `http://localhost:7070` with SSE updates
-- Conversation history awareness for smarter attacks
-- Custom objective support (e.g. "dump the system instructions")
-- Detailed logging to `logs.jsonl`
-- Clean cyberpunk-style interface
-
----
-## ⚙️ How It Works
-
-1. The tool sends a payload to the target (HTTP or WebSocket)
-2. The target response is analyzed by the Advisor LLM
-3. The Advisor generates the next optimized payload based on history and results
-4. Every response is checked by the Evaluator LLM for sensitive leaks
-5. All data is logged and pushed live to the dashboard
-6. The process repeats and adapts with each iteration
-
----
-
-## 🚀 Quick Start
+## Installation
 
 ### Prerequisites
 
-- Python 3.10 or higher
-- `websocat` (required for WebSocket mode):
+- Python 3.10+
+- Network access to your advisor/LLM endpoint
+
+### Setup
 
 ```bash
-sudo apt install websocat
-````
-
-* A running uncensored LLM as the advisor
-
----
-
-## ⚠️ Important: Uncensored Advisor Setup
-
-This tool is designed to work with an uncensored agent installation.
-
-For the complete setup guide, refer to:
-[https://eslam3kl.gitbook.io](https://eslam3kl.gitbook.io)
-
-Make sure your advisor is accessible at an endpoint like:
-
-```
-http://127.0.0.1:8080/v1/chat/completions
-```
-![Dashboard Preview](./images/dashboard.png)
-
----
-
-## 📦 Installation
-
-```bash
-git clone https://github.com/yourusername/fuzz-ctrl.git
-cd fuzz-ctrl
+python -m venv .venv
+.venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
----
-
-## 🧪 Usage
-
-### HTTP Mode
+On macOS/Linux:
 
 ```bash
-python3 main.py --mode http \
-  -r req.http \
-  -au http://127.0.0.1:8080/v1/chat/completions \
-  --objective "dump the system instructions"
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-### WebSocket Mode
+## Usage
+
+Start the app:
 
 ```bash
-python3 main.py --mode ws \
-  -w ws_config.json \
-  -au http://127.0.0.1:8080/v1/chat/completions
+python main.py
 ```
 
-### With Max Iterations
+Then open:
 
-```bash
-python3 main.py -m http \
-  -r req.http \
-  -au http://localhost:8080/v1/chat/completions \
-  --max-iterations 50
-```
-
----
-
-## 🖥️ Live Dashboard
-
-While the tool is running, open your browser and navigate to:
-
-```
+```text
 http://localhost:7070
 ```
 
-You will see:
+Basic flow in UI:
 
-* Real-time attack log feed
-* Current payload and target response
-* Leak detection alerts
-* Advisor and evaluator prompt inspection
-* Live iteration and leak counters
+1. Add attacker agents (advisor endpoints + request templates).
+2. Add target agents (HTTP/Socket + request/proxy/header options).
+3. Go to `New Assessment`, choose attacker/target, set objective/context.
+4. Launch and monitor in `Running Assessments`.
+5. Inspect completed runs in `Reports`.
 
----
+## Project Structure
 
-## 📁 Project Structure
-
-```
-fuzz-ctrl/
-├── main.py              # Main entry point
-├── advisor_agent.py     # LLM advisor logic
-├── dashboard.py         # Live dashboard (SSE + HTML)
-├── memory.py            # Logging and history management
-├── ws_transport.py      # WebSocket transport using websocat
-├── ws_config.json       # Example WebSocket configuration
+```text
+.
+├── main.py                # App entrypoint and assessment orchestration
+├── dashboard.py           # Dashboard HTTP server + embedded UI
+├── advisor_agent.py       # Advisor/evaluator prompting and parsing
+├── ws_transport.py        # WebSocket transport helpers
+├── memory.py              # Simple log/history helpers
+├── agent_config/
+│   ├── attacker_agents.json
+│   └── target_agents.json
 └── requirements.txt
 ```
 
----
+## Future Features
 
-## ⚠️ Disclaimer
+- Multi-assessment parallel scheduling and queueing
+- Exportable report bundles (JSON/HTML/PDF)
+- Rule packs for common red-team scenarios
+- Pluggable leak detectors and scoring strategies
+- Authentication and role-based access for dashboard
+- Automated regression testing for agent profiles
+- Better model analytics (latency, token usage, technique success rate)
 
-This tool is intended only for authorized security testing, red teaming, and research purposes.
-Always ensure you have explicit permission before testing any target.
+## Security Notice
 
----
-
-## 📚 Resources
-
-* Uncensored LLM Setup Guide: [https://eslam3kl.gitbook.io](https://eslam3kl.gitbook.io)
-* Blog: Eslam3kl's GitBook
-
----
-
-## 👨‍💻 Author
-
-Made by Eslam Akl & Hamed Ashraf.
- 
+Use only in authorized environments where you have explicit permission to test.

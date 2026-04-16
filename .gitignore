@@ -1,0 +1,36 @@
+# Python cache / build
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Runtime output / local state
+*.log
+*.jsonl
+logs.jsonl
+assessment_session_logs.jsonl
+.webui_secret_key
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.cursor/
+
+# Optional local env files
+.env
+.env.*
+
+# Local agent config (do not publish real endpoints/secrets)
+agent_config/*.json
+!agent_config/*.example.json
